@@ -11,7 +11,7 @@ const connectToMongoDb = async () => {
   try {
     const connection = await client.connect();
     console.log(`connected to db ${connection.db().databaseName}`);
-    app.locals.db = connection.db("test");
+    app.locals.dbConnection = connection;
     process.on("SIGINT", async () => {
       try {
         await connection.close();
