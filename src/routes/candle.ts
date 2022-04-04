@@ -1,4 +1,4 @@
-import app from "../app";
+import { app } from "../app";
 import { Router } from "express";
 import CandleController from "../controllers/candleController";
 

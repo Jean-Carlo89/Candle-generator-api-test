@@ -9,6 +9,7 @@ export default class CandleController {
   }
 
   public async saveNew(candle: Candle) {
+    // console.log(this._databaseConnection);
     const db = this._databaseConnection.db("Candle-Generator");
     const collection = db.collection("candles");
     collection.insertOne(candle);

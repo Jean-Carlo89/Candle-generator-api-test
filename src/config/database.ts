@@ -1,6 +1,6 @@
 import { Sign } from "crypto";
 import { MongoClient } from "mongodb";
-import app from "../app";
+import { app } from "../app";
 
 //let connectionexport;
 
@@ -20,8 +20,10 @@ const connectToMongoDb = async () => {
         console.log(e);
       }
     });
+    return true;
   } catch (e) {
-    console.log(e);
+    console.log("Erro during db connection");
+    return null;
   }
 };
 
