@@ -5,32 +5,35 @@ import * as http from "http";
 import { app } from "../app";
 import { json } from "express";
 import { Candle } from "../models/CandleModel";
+import { MongoClient } from "mongodb";
 
 export default class CandleMessageChannel {
   private _channel: Channel;
   private _candleController: CandleController;
   private _io: Server;
 
-  // constructor(server: http.Server) {
-  //   this._candleController = new CandleController(app.locals.dbConnection);
-  //   this._io = new Server(server, {
-  //     cors: {
-  //       origin: process.env.SOCKET_CLIENT_SERVER,
-  //       methods: ["GET", "POST"],
-  //     },
-  //   });
+  constructor(server: http.Server) {
+    //console.log(app.locals.db);
 
-  //   this._io.on("connection", (client) => {
-  //     console.log(`Client connected : ${client.id}`);
-  //     console.log("Web socket connection created");
+    this._candleController = new CandleController(app.locals.fb);
+    //this._candleController = new CandleController(connection);
 
-  //     client.on("disconnect", () => {
-  //       console.log(`Client disconnected : ${client.id}`);
-  //     });
-  //   });
-  // }
+    this._io = new Server(server, {
+      cors: {
+        origin: process.env.SOCKET_CLIENT_SERVER,
+        methods: ["GET", "POST"],
+      },
+    });
 
-  constructor() {}
+    this._io.on("connection", (client) => {
+      console.log(`Client connected : ${client.id}`);
+      console.log("Web socket connection created");
+
+      client.on("disconnect", () => {
+        console.log(`Client disconnected : ${client.id}`);
+      });
+    });
+  }
 
   //* Create channel with rabbitmq
   private async _createMessageChanel() {

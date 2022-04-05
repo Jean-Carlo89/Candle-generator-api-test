@@ -5,7 +5,8 @@ import CandleController from "../controllers/candleController";
 const candleRouter = Router();
 
 candleRouter.get("/:quantity", async (req, res) => {
-  const candleCtrl = new CandleController(app.locals.dbConnection);
+  // console.log(app.locals.db);
+  const candleCtrl = new CandleController(app.locals.db);
   const quantity = parseInt(req.params.quantity);
   const lastCandles = await candleCtrl.getLastCandles(quantity);
   return res.json(lastCandles);

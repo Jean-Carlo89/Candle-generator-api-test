@@ -6,21 +6,24 @@ import { app } from "../app";
 
 const connectToMongoDb = async () => {
   console.log(process.env.MDB_URI);
-  const client = new MongoClient(process.env.MDB_URI);
 
   try {
+    const client = await new MongoClient(process.env.MDB_URI);
+    app.locals.fb = client;
     const connection = await client.connect();
     console.log(`connected to db ${connection.db().databaseName}`);
-    app.locals.dbConnection = connection;
+    app.locals.db = connection;
     process.on("SIGINT", async () => {
       try {
-        await connection.close();
-        console.log("connection to db closed");
+        connection.close(() => {
+          console.log("connection to db closed");
+        });
       } catch (e) {
         console.log(e);
+        return;
       }
     });
-    return true;
+    return connection;
   } catch (e) {
     console.log("Erro during db connection");
     return null;

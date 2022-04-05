@@ -9,10 +9,16 @@ export default class CandleController {
   }
 
   public async saveNew(candle: Candle) {
+    await this._databaseConnection.connect();
     // console.log(this._databaseConnection);
     const db = this._databaseConnection.db("Candle-Generator");
     const collection = db.collection("candles");
     collection.insertOne(candle);
+
+    // const candleCtrl = new CandleController(this._databaseConnection);
+    // const quantity = parseInt("2");
+    // const lastCandles = await candleCtrl.getLastCandles(quantity);
+    // console.log(lastCandles);
   }
 
   public async getLastCandles(quantity: number): Promise<Candle[]> {
